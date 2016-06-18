@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset=utf-8 />
+    <title>Location and Population of Kigali, Kampala, and Bujumbura</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+    <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: whitesmoke;
+            font-family: Lato, sans-serif;
+            color: #0D0000;
+        }
+        header {
+            padding: 6px 10%;
+        }
+        h1 {
+            display: inline-block;
+            margin-right: 20px;
+            color: #001323;
+        }
+        h2 {
+            display: inline-block;
+            color: #001323;
+        }
+        #map {
+            width: 80%;
+            height: 540px;
+            margin: 10px auto;
+        }
+        footer {
+            padding: 6px 10%;
+            width: 80%;
+        }
+        p {
+            font-size: 1em;
+            color: #001323;
+        }
+        .rwanda-blue {
+            color: #0000FF;
+        }
+        .uganda-red {
+            color: #FF0000;
+        }
+        .burundi-green {
+            color: #00FF00;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Location and Population of Kigali, Kampala, and Bujumbura</h1>
+        <h2>Colour-Coded by Country (Rwanda is Blue, Kampala is Red, and Burundi is Green)</h2>
+    </header>
+
+    <div id='map'></div>
+
+    <footer>
+        <p>Map authored by Kirsty Henderson</p>
+        <p>City coordinates obtained from <a href="http://www.satsig.net/maps/lat-long-finder.htm" target="_blank">http://www.satsig.net/maps/lat-long-finder.htm</a> and population data was provided by the all-seeing and all-knowing <a href="http://www.google.com" target="_blank">Google</a>.</p>
+    </footer>
+
+    <script>
+
+        var map = L.map('map', {
+            center: [-1.0352,31.0529],
+            zoom: 7,
+        });
+       
+        var tiles = L.tileLayer('http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    });
+        map.addLayer(tiles);
+        
+        // Begin writing/modifying code for Lab 06 here
+        
+        var cities = [
+             {
+                 city: "Kigali",
+                 properties: {
+                     coordinates: [-1.9591, 30.0764],
+                     population: 603049,
+                     country: "Rwanda",
+                     logo: 'images/rwanda-flag.jpg'
+                 },
+             },
+             {
+                 city: "Kampala",
+                 properties: {
+                     coordinates: [0.3476,32.5825],
+                     population: 1209000,
+                     country: "Uganda",
+                     logo: 'images/uganda-flag.jpg'
+                 },
+             },
+             {
+                 city: "Bujumbura",
+                 properties: {
+                     coordinates: [-3.3762,29.3541],
+                     population: 497169,
+                     country: "Burundi",
+                     logo: 'images/burundi-flag.jpg'
+                 },
+             }
+        ];
+        
+        for (var i = 0; i < cities.length; i++) {
+            
+            var props = cities[i].properties;
+
+            var popup = buildPopup(cities[i].city, cities[i].properties.population, cities[i].properties.country, cities[i].properties.logo);
+
+            L.marker(props.coordinates).addTo(map)
+                .bindPopup(popup);
+        }
+        
+        function buildPopup(city, pop, country, logo) {
+            if(country == 'Rwanda') {
+                var colourClass = 'rwanda-blue';
+            } else if(country == 'Uganda') {
+                var colourClass = 'uganda-red';
+            } else {
+                var colourClass = 'burundi-green';
+            }
+            return "<img src="+logo+"><div class='"+colourClass+"'><b>"+city+"</b><br>"+
+                "<b>Population</b>: "+pop.toLocaleString()+"<div>";
+        }
+          
+    </script>
+    
+</body>
+
+</html>
